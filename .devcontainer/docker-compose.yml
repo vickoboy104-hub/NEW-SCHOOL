@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspaces/eduanimate:cached
+    command: sleep infinity
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: eduanimate
+      MYSQL_USER: eduanimate
+      MYSQL_PASSWORD: eduanimate_dev
+      FLASK_APP: app
+      FLASK_DEBUG: 1
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: eduanimate
+      MYSQL_USER: eduanimate
+      MYSQL_PASSWORD: eduanimate_dev
+      MYSQL_ROOT_PASSWORD: root_dev_only
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot_dev_only"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  mysql-data:
