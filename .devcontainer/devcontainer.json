@@ -1,0 +1,20 @@
+{
+  "name": "EduAnimate Flask + MySQL",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/eduanimate",
+  "forwardPorts": [5000],
+  "portsAttributes": {
+    "5000": {
+      "label": "EduAnimate Flask Website",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "python scripts/init_db.py",
+  "postStartCommand": "bash .devcontainer/start.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-azuretools.vscode-docker"]
+    }
+  }
+}
